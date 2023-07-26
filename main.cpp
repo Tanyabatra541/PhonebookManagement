@@ -6,14 +6,6 @@
 #include<vector>
 using namespace std;
 
-struct phonebook{
-    string name;
-    string number;
-};
-
-struct phonebook ph;
-const int MAX_STRUCTURES = 100;
-vector<phonebook> contact_array;
 
 int main(){
 
@@ -39,23 +31,23 @@ int main(){
 
         switch(choice){
             case 1:
-                add_contact(contact_array, MAX_STRUCTURES, ph);
+                add_contact();
                 break;
             
             case 2:
-                delete_contact(contact_array, MAX_STRUCTURES, ph);
+                delete_contact();
                 break;
             
             case 3:
-                modify_contact(contact_array, MAX_STRUCTURES, ph);
+                modify_contact();
                 break;
             
             case 4: 
-                search_contact(contact_array, MAX_STRUCTURES, ph);
+                search_contact();
                 break;
 
             case 5:
-                displayAll(contact_array, MAX_STRUCTURES, ph);
+                displayAll();
                 break;
             
             case 6:

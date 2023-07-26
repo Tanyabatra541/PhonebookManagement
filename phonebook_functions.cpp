@@ -6,8 +6,16 @@
 #include<vector>
 using namespace std;
 
+struct phonebook{
+    string name;
+    string number;
+};
 
-void add_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook& ph){
+struct phonebook ph;
+const int MAX_STRUCTURES = 100;
+vector<phonebook> contact_array;
+
+void add_contact(){
     if(contact_array.size()<=MAX_STRUCTURES){
         cout<<"Enter the name to be added: ";
         getline(cin, ph.name);
@@ -20,7 +28,7 @@ void add_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook
     }
 }
 
-void delete_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook& ph){
+void delete_contact(){
     string toBeDeleted;
     cout<<"Enter the name or number to be deleted: ";
     getline(cin, toBeDeleted);
@@ -34,7 +42,7 @@ void delete_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phoneb
     cout<<"\nContact Deleted!!!!\n";
 }
 
-void modify_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook& ph){
+void modify_contact(){
     string toBeModified;
     cout<<"Enter the name or number to be deleted: "<<endl;
     getline(cin, toBeModified);
@@ -50,7 +58,7 @@ void modify_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phoneb
     cout<<"\nContact Modified!!!!\n";
 }
 
-void search_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook& ph){
+void search_contact(){
     string toBeFound; int flag = 0;
     cout<<"Enter the name or number to be searched: "<<endl;
     getline(cin, toBeFound);
@@ -63,7 +71,7 @@ void search_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phoneb
     }
 }
 
-void displayAll(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook& ph){
+void displayAll(){
     cout<<"\nAll Contacts"<<endl<<endl;
     cout<<"Name"<<"\t\t"<<"Number"<<endl;
     for(int i=0;i<contact_array.size();i++){

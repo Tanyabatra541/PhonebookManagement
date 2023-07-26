@@ -1,13 +1,10 @@
-// #ifndef PHONEBOOK_FUNCTIONS
-// #define PHONEBOOK_FUNCTIONS
-#include <iostream>
-#include <vector>
-using namespace std;
+#ifndef PHONEBOOK_FUNCTIONS_H
+#define PHONEBOOK_FUNCTIONS_H
 
-void add_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook& ph);
-void delete_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook& ph);
-void modify_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook& ph);
-void search_contact(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook& ph);
-void displayAll(vector<phonebook>& contact_array, int MAX_STRUCTURES, phonebook& ph);
+void add_contact();
+void delete_contact();
+void modify_contact();
+void search_contact();
+void displayAll();
 
-// #endif 
+#endif 
