@@ -4,6 +4,8 @@
 #include <bits/stdc++.h>
 #include<string>
 #include<vector>
+#include<fstream>
+#include<cstdio>
 using namespace std;
 
 struct phonebook{
@@ -22,6 +24,12 @@ void add_contact(){
         cout<<"Enter the number: ";
         getline(cin,ph.number);
         contact_array.push_back({ph.name, ph.number});
+        
+        //for a file
+        ofstream fout("phonebook.txt", ios::app); //ios is for input output stream, can use ofstream here too
+        // ofstream fout("phonebook.txt", ios::out | ios::trunc); This is to clear the file contents
+        fout<<ph.name<<","<<ph.number<<"\n";
+        fout.close();
     }
     else{
         cout<<"Not enough memory. Delete some contacts";
@@ -39,6 +47,21 @@ void delete_contact(){
         }
         
     }
+
+    // for a file
+    ifstream fin("phonebook.txt");
+    ofstream fout("temp.txt");
+    string line;
+    while (getline(fin, line)) {
+        bool found = line.find(toBeDeleted); //0 if found and 1 if not found
+        if (found == 1)
+            fout<<line<<"\n";
+    }
+    fout.close();
+    fin.close();
+    remove("phonebook.txt");
+    rename("temp.txt", "phonebook.txt");
+ 
     cout<<"\nContact Deleted!!!!\n";
 }
 
@@ -55,6 +78,29 @@ void modify_contact(){
         }
         
     }
+
+    // for a file
+    ifstream fin("phonebook.txt");
+    ofstream fout("temp.txt");
+    string line;
+    while (getline(fin, line)){
+        stringstream ss(line);
+        string str1, str2;
+        if (getline(ss, str1, ',') && getline(ss, str2, ',')){
+            if(str1 == toBeModified || str2 == toBeModified){
+                str2 = modifiedNumber;
+                fout<<str1<<","<<str2<<"\n";
+            }
+            else{
+                fout<<str1<<","<<str2<<"\n";
+            }
+        }
+    }
+    fout.close();
+    fin.close();
+    remove("phonebook.txt");
+    rename("temp.txt", "phonebook.txt");
+
     cout<<"\nContact Modified!!!!\n";
 }
 
@@ -69,6 +115,21 @@ void search_contact(){
             cout<<i -> name<<"\t\t"<<i -> number<<endl;
         }
     }
+
+    //for a file
+    ifstream fin("phonebook.txt");
+    string line;
+    while (getline(fin, line)){
+        stringstream ss(line);
+        cout<<ss(line);
+        string str1, str2;
+        if (getline(ss, str1, ',') && getline(ss, str2, ',')){
+            if(str1 == toBeFound || str2 == toBeFound){
+                cout<<str1<<","<<str2<<"\n";
+            }
+        }
+    }
+    fin.close();
 }
 
 void displayAll(){
