@@ -1,11 +1,12 @@
 #include "phonebook_functions.h"
-#include<iostream>
-#include<algorithm>
+#include <iostream>
+#include <algorithm>
 #include <bits/stdc++.h>
-#include<string>
-#include<vector>
-#include<fstream>
-#include<cstdio>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <cstdio>
+
 using namespace std;
 
 struct phonebook{
@@ -14,65 +15,81 @@ struct phonebook{
 };
 
 struct phonebook ph;
-const int MAX_STRUCTURES = 100;
-vector<phonebook> contact_array;
+const int MAX_CONTACTS = 100;
+vector<phonebook> contacts_array;
+char phonebook_file[] = "phonebook.txt";
 
-void add_contact(){
-    if(contact_array.size()<=MAX_STRUCTURES){
+bool read_contacts() {
+    ifstream fin(phonebook_file);
+    string line;
+    while(getline(fin, line)) {
+        stringstream ss(line);
+        struct phonebook tmp_contact;
+        if (getline(ss, tmp_contact.name, ',') && getline(ss, tmp_contact.number, ',')){
+            contacts_array.push_back({tmp_contact.name, tmp_contact.number});
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+
+void add_contact() {
+    if(contacts_array.size() <= MAX_CONTACTS){
         cout<<"Enter the name to be added: ";
         getline(cin, ph.name);
         cout<<"Enter the number: ";
         getline(cin,ph.number);
-        contact_array.push_back({ph.name, ph.number});
+        contacts_array.push_back({ph.name, ph.number});
         
         //for a file
-        ofstream fout("phonebook.txt", ios::app); //ios is for input output stream, can use ofstream here too
-        // ofstream fout("phonebook.txt", ios::out | ios::trunc); This is to clear the file contents
+        ofstream fout(phonebook_file, ios::app); //ios is for input output stream, can use ofstream here too
+        // ofstream fout(phonebook_file, ios::out | ios::trunc); This is to clear the file contents
         fout<<ph.name<<","<<ph.number<<"\n";
         fout.close();
+        cout<<"\n\033[32mContact added!!\033[0m\n";
     }
     else{
         cout<<"Not enough memory. Delete some contacts";
     }
 }
 
-void delete_contact(){
+void delete_contact() {
     string toBeDeleted;
     cout<<"Enter the name or number to be deleted: ";
     getline(cin, toBeDeleted);
-    for(auto i=contact_array.begin();i!=contact_array.end();i++){
+    for(auto i = contacts_array.begin(); i != contacts_array.end(); i++){
         if(i -> name == toBeDeleted || i -> number == toBeDeleted){
-            contact_array.erase(i);
+            contacts_array.erase(i);
             break;
         }
-        
     }
 
     // for a file
-    ifstream fin("phonebook.txt");
+    ifstream fin(phonebook_file);
     ofstream fout("temp.txt");
     string line;
-    while (getline(fin, line)) {
-        bool found = line.find(toBeDeleted); //0 if found and 1 if not found
-        if (found == 1)
+    while(getline(fin, line)) {
+        if(line.find(toBeDeleted)) { //0 if found and 1 if not found
             fout<<line<<"\n";
+        }
     }
     fout.close();
     fin.close();
-    remove("phonebook.txt");
-    rename("temp.txt", "phonebook.txt");
+    remove(phonebook_file);
+    rename("temp.txt", phonebook_file);
  
-    cout<<"\nContact Deleted!!!!\n";
+    cout<<"\n\033[31mContact Deleted!!\033[0m\n";
 }
 
-void modify_contact(){
+void modify_contact() {
     string toBeModified;
     cout<<"Enter the name or number to be deleted: "<<endl;
     getline(cin, toBeModified);
     string modifiedNumber;
     cout<<"Enter the modified number: ";
     getline(cin, modifiedNumber);
-    for(auto i=contact_array.begin();i!=contact_array.end();i++){
+    for(auto i=contacts_array.begin();i!=contacts_array.end();i++){
         if(i -> number == toBeModified || i -> name == toBeModified){
             i -> number = modifiedNumber;
         }
@@ -80,7 +97,7 @@ void modify_contact(){
     }
 
     // for a file
-    ifstream fin("phonebook.txt");
+    ifstream fin(phonebook_file);
     ofstream fout("temp.txt");
     string line;
     while (getline(fin, line)){
@@ -98,26 +115,26 @@ void modify_contact(){
     }
     fout.close();
     fin.close();
-    remove("phonebook.txt");
-    rename("temp.txt", "phonebook.txt");
+    remove(phonebook_file);
+    rename("temp.txt", phonebook_file);
 
-    cout<<"\nContact Modified!!!!\n";
+    cout<<"\n\033[33mContact Modified!!\033[0m\n";
 }
 
-void search_contact(){
+void search_contact() {
     string toBeFound; int flag = 0;
     cout<<"Enter the name or number to be searched: "<<endl;
     getline(cin, toBeFound);
     cout<<"\nSearch results are: "<<endl;
-    cout<<"Name"<<"\t\t"<<"Number"<<endl;
-    for(auto i=contact_array.begin();i!=contact_array.end();i++){
+    cout<<"| Name"<<"\t|\t"<<"Number |"<<endl;
+    for(auto i=contacts_array.begin();i!=contacts_array.end();i++){
         if(i -> number == toBeFound || i -> name == toBeFound){
             cout<<i -> name<<"\t\t"<<i -> number<<endl;
         }
     }
 
     //for a file
-    ifstream fin("phonebook.txt");
+    ifstream fin(phonebook_file);
     string line;
     while (getline(fin, line)){
         stringstream ss(line);
@@ -133,9 +150,9 @@ void search_contact(){
 }
 
 void displayAll(){
-    cout<<"\nAll Contacts"<<endl<<endl;
-    cout<<"Name"<<"\t\t"<<"Number"<<endl;
-    for(int i=0;i<contact_array.size();i++){
-        cout<<contact_array[i].name<<"\t\t"<<contact_array[i].number<<endl;
-    }
+    cout<<"\nAll Contacts"<<endl;
+    cout<<"------------"<<endl;
+    cout<<"Name"<<"\t|\t"<<"Number"<<endl;
+    for(int i=0; i < contacts_array.size(); i++)
+        cout<<contacts_array[i].name<<"\t|\t"<<contacts_array[i].number<<endl;
 }
