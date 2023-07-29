@@ -121,7 +121,7 @@ void search_contact(){
     string line;
     while (getline(fin, line)){
         stringstream ss(line);
-        cout<<ss(line);
+        // cout<<ss(line);
         string str1, str2;
         if (getline(ss, str1, ',') && getline(ss, str2, ',')){
             if(str1 == toBeFound || str2 == toBeFound){
