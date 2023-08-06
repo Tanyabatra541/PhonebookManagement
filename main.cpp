@@ -1,13 +1,16 @@
-#include "phonebook_functions.h"
-#include<iostream>
-#include<algorithm>
+#include <iostream>
+#include <algorithm>
 #include <bits/stdc++.h>
-#include<string>
-#include<vector>
+#include <string>
+#include <vector>
+
+#include "phonebook_functions.h"
+#include "sqlite3.h"
+#define DB_NAME "contacts.sqlite"
 
 using namespace std;
 
-int main(){
+int main() {
     // Display menu
     cout<<"\033[32m";
     cout<<"+---------------------------+"<<endl;
@@ -15,9 +18,37 @@ int main(){
     cout<<"+---------------------------+"<<endl;
     cout<<"\033[0m";
 
-    cout<<"Reading contacts..."<<endl;
+    cout<<"reading contacts..."<<endl;
+
+    sqlite3* db;
+    // Save the connection result
+    int rc = 0;
+    rc = sqlite3_open(DB_NAME, &db);
+    // Test if there was an error
+    if(rc)
+        cerr<<"DB Open Error: "<<sqlite3_errmsg(db)<<endl;
+    else
+        cout<<"opened database..."<<endl;
+
+    // Create table if not exists
+    const char* createTableQuery = "CREATE TABLE IF NOT EXISTS contacts(name TEXT, number TEXT PRIMARY KEY);";
+    char* errorMsg;
+    rc = sqlite3_exec(db, createTableQuery, 0, 0, &errorMsg);
+    if(rc != SQLITE_OK) {
+        cerr<<"SQL error: "<<errorMsg<<endl;
+        sqlite3_free(errorMsg);
+    } else {
+        cout<<"table for contacts exists..."<<endl;
+    }
+
+    // Close the connection
+    sqlite3_close(db);
+    
     if(read_contacts()) {
         cout<<"\033[32mSuccessful!\033[0m\n";
+    } else {
+        cout<<"\033[31mError!\033[0m\n";
+        return 1;
     }
 
     int choice;
@@ -52,7 +83,7 @@ int main(){
                 displayAll();
                 break;
             case 6:
-                exit(0);
+                return 0;
                 break;
             default:
                 cout<<"Read the options!!"<<endl;
